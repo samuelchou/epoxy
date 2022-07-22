@@ -55,7 +55,9 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
         setAdapter(recyclerView.adapter)
     }
 
-    override fun onAdapterChanged(oldAdapter: RecyclerView.Adapter<*>?, newAdapter: RecyclerView.Adapter<*>?) {
+    override fun onAdapterChanged(
+        oldAdapter: RecyclerView.Adapter<*>?, newAdapter: RecyclerView.Adapter<*>?
+    ) {
         super.onAdapterChanged(oldAdapter, newAdapter)
         setAdapter(newAdapter)
     }
@@ -89,7 +91,9 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
         }
     }
 
-    override fun scrollVerticallyBy(dy: Int, recycler: RecyclerView.Recycler, state: RecyclerView.State?): Int {
+    override fun scrollVerticallyBy(
+        dy: Int, recycler: RecyclerView.Recycler, state: RecyclerView.State?
+    ): Int {
         val scrolled = restoreView { super.scrollVerticallyBy(dy, recycler, state) }
         if (scrolled != 0) {
             updateStickyHeader(recycler, false)
@@ -97,7 +101,9 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
         return scrolled
     }
 
-    override fun scrollHorizontallyBy(dx: Int, recycler: RecyclerView.Recycler, state: RecyclerView.State?): Int {
+    override fun scrollHorizontallyBy(
+        dx: Int, recycler: RecyclerView.Recycler, state: RecyclerView.State?
+    ): Int {
         val scrolled = restoreView { super.scrollHorizontallyBy(dx, recycler, state) }
         if (scrolled != 0) {
             updateStickyHeader(recycler, false)
@@ -112,11 +118,15 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
         }
     }
 
-    override fun scrollToPosition(position: Int) = scrollToPositionWithOffset(position, INVALID_OFFSET)
+    override fun scrollToPosition(position: Int) =
+        scrollToPositionWithOffset(position, INVALID_OFFSET)
 
-    override fun scrollToPositionWithOffset(position: Int, offset: Int) = scrollToPositionWithOffset(position, offset, true)
+    override fun scrollToPositionWithOffset(position: Int, offset: Int) =
+        scrollToPositionWithOffset(position, offset, true)
 
-    private fun scrollToPositionWithOffset(position: Int, offset: Int, adjustForStickyHeader: Boolean) {
+    private fun scrollToPositionWithOffset(
+        position: Int, offset: Int, adjustForStickyHeader: Boolean
+    ) {
         // Reset pending scroll.
         setScrollState(RecyclerView.NO_POSITION, INVALID_OFFSET)
 
@@ -141,7 +151,8 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
 
         // Current sticky header is the same as at the position. Adjust the scroll offset and reset pending scroll.
         if (stickyHeader != null && headerIndex == findHeaderIndex(stickyHeaderPosition)) {
-            val adjustedOffset = (if (offset != INVALID_OFFSET) offset else 0) + stickyHeader!!.height
+            val adjustedOffset =
+                (if (offset != INVALID_OFFSET) offset else 0) + stickyHeader!!.height
             super.scrollToPositionWithOffset(position, adjustedOffset)
             return
         }
@@ -154,19 +165,26 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
     //region Computation
     // Mainly [RecyclerView] functionality by removing sticky header from calculations
 
-    override fun computeVerticalScrollExtent(state: RecyclerView.State): Int = restoreView { super.computeVerticalScrollExtent(state) }
+    override fun computeVerticalScrollExtent(state: RecyclerView.State): Int =
+        restoreView { super.computeVerticalScrollExtent(state) }
 
-    override fun computeVerticalScrollOffset(state: RecyclerView.State): Int = restoreView { super.computeVerticalScrollOffset(state) }
+    override fun computeVerticalScrollOffset(state: RecyclerView.State): Int =
+        restoreView { super.computeVerticalScrollOffset(state) }
 
-    override fun computeVerticalScrollRange(state: RecyclerView.State): Int = restoreView { super.computeVerticalScrollRange(state) }
+    override fun computeVerticalScrollRange(state: RecyclerView.State): Int =
+        restoreView { super.computeVerticalScrollRange(state) }
 
-    override fun computeHorizontalScrollExtent(state: RecyclerView.State): Int = restoreView { super.computeHorizontalScrollExtent(state) }
+    override fun computeHorizontalScrollExtent(state: RecyclerView.State): Int =
+        restoreView { super.computeHorizontalScrollExtent(state) }
 
-    override fun computeHorizontalScrollOffset(state: RecyclerView.State): Int = restoreView { super.computeHorizontalScrollOffset(state) }
+    override fun computeHorizontalScrollOffset(state: RecyclerView.State): Int =
+        restoreView { super.computeHorizontalScrollOffset(state) }
 
-    override fun computeHorizontalScrollRange(state: RecyclerView.State): Int = restoreView { super.computeHorizontalScrollRange(state) }
+    override fun computeHorizontalScrollRange(state: RecyclerView.State): Int =
+        restoreView { super.computeHorizontalScrollRange(state) }
 
-    override fun computeScrollVectorForPosition(targetPosition: Int): PointF? = restoreView { super.computeScrollVectorForPosition(targetPosition) }
+    override fun computeScrollVectorForPosition(targetPosition: Int): PointF? =
+        restoreView { super.computeScrollVectorForPosition(targetPosition) }
 
     override fun onFocusSearchFailed(
         focused: View,
@@ -233,7 +251,8 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
             if (anchorView != null && anchorPos != -1) {
                 val headerIndex = findHeaderIndexOrBefore(anchorPos)
                 val headerPos = if (headerIndex != -1) headerPositions[headerIndex] else -1
-                val nextHeaderPos = if (headerCount > headerIndex + 1) headerPositions[headerIndex + 1] else -1
+                val nextHeaderPos =
+                    if (headerCount > headerIndex + 1) headerPositions[headerIndex + 1] else -1
 
                 // Show sticky header if:
                 // - There's one to show;
@@ -244,7 +263,10 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
                     nextHeaderPos != headerPos + 1
                 ) {
                     // 1. Ensure existing sticky header, if any, is of correct type.
-                    if (stickyHeader != null && getItemViewType(stickyHeader!!) != adapter?.getItemViewType(headerPos)) {
+                    if (stickyHeader != null && getItemViewType(stickyHeader!!) != adapter?.getItemViewType(
+                            headerPos
+                        )
+                    ) {
                         // A sticky header was shown before but is not of the correct type. Scrap it.
                         scrapStickyHeader(recycler)
                     }
@@ -252,13 +274,15 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
                     // 2. Ensure sticky header is created, if absent, or bound, if being laid out or the position changed.
                     if (stickyHeader == null) createStickyHeader(recycler, headerPos)
                     // 3. Bind the sticky header
-                    if (layout || getPosition(stickyHeader!!) != headerPos) bindStickyHeader(recycler, stickyHeader!!, headerPos)
+                    if (layout || getPosition(stickyHeader!!) != headerPos)
+                        bindStickyHeader(recycler, stickyHeader!!, headerPos)
 
                     // 4. Draw the sticky header using translation values which depend on orientation, direction and
                     // position of the next header view.
                     stickyHeader?.let {
                         val nextHeaderView: View? = if (nextHeaderPos != -1) {
-                            val nextHeaderView = getChildAt(anchorIndex + (nextHeaderPos - anchorPos))
+                            val nextHeaderView =
+                                getChildAt(anchorIndex + (nextHeaderPos - anchorPos))
                             // The header view itself is added to the RecyclerView. Discard it if it comes up.
                             if (nextHeaderView === stickyHeader) null else nextHeaderView
                         } else null
@@ -300,7 +324,9 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
     /**
      * Binds the [stickyHeader] for the given [position].
      */
-    private fun bindStickyHeader(recycler: RecyclerView.Recycler, stickyHeader: View, position: Int) {
+    private fun bindStickyHeader(
+        recycler: RecyclerView.Recycler, stickyHeader: View, position: Int
+    ) {
         // Bind the sticky header.
         recycler.bindViewToPosition(stickyHeader, position)
         stickyHeaderPosition = position
@@ -308,16 +334,18 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
 
         // If we have a pending scroll wait until the end of layout and scroll again.
         if (scrollPosition != RecyclerView.NO_POSITION) {
-            stickyHeader.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    if (Build.VERSION.SDK_INT < 16) stickyHeader.viewTreeObserver.removeGlobalOnLayoutListener(this)
-                    else stickyHeader.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    if (scrollPosition != RecyclerView.NO_POSITION) {
-                        scrollToPositionWithOffset(scrollPosition, scrollOffset)
-                        setScrollState(RecyclerView.NO_POSITION, INVALID_OFFSET)
+            stickyHeader.viewTreeObserver
+                .addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        if (Build.VERSION.SDK_INT < 16)
+                            stickyHeader.viewTreeObserver.removeGlobalOnLayoutListener(this)
+                        else stickyHeader.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        if (scrollPosition != RecyclerView.NO_POSITION) {
+                            scrollToPositionWithOffset(scrollPosition, scrollOffset)
+                            setScrollState(RecyclerView.NO_POSITION, INVALID_OFFSET)
+                        }
                     }
-                }
-            })
+                })
         }
     }
 
@@ -327,8 +355,12 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
     private fun measureAndLayout(stickyHeader: View) {
         measureChildWithMargins(stickyHeader, 0, 0)
         when (orientation) {
-            VERTICAL -> stickyHeader.layout(paddingLeft, 0, width - paddingRight, stickyHeader.measuredHeight)
-            else -> stickyHeader.layout(0, paddingTop, stickyHeader.measuredWidth, height - paddingBottom)
+            VERTICAL -> stickyHeader.layout(
+                paddingLeft, 0, width - paddingRight, stickyHeader.measuredHeight
+            )
+            else -> stickyHeader.layout(
+                0, paddingTop, stickyHeader.measuredWidth, height - paddingBottom
+            )
         }
     }
 
@@ -405,11 +437,17 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
                     y += (height - headerView.height).toFloat()
                 }
                 if (nextHeaderView != null) {
-                    val bottomMargin = (nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams)?.bottomMargin ?: 0
-                    val topMargin = (nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams)?.topMargin ?: 0
+                    val bottomMargin =
+                        (nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams)?.bottomMargin
+                            ?: 0
+                    val topMargin =
+                        (nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams)?.topMargin
+                            ?: 0
                     y = when {
-                        reverseLayout -> (nextHeaderView.bottom + bottomMargin).toFloat().coerceAtLeast(y)
-                        else -> (nextHeaderView.top - topMargin - headerView.height).toFloat().coerceAtMost(y)
+                        reverseLayout -> (nextHeaderView.bottom + bottomMargin).toFloat()
+                            .coerceAtLeast(y)
+                        else -> (nextHeaderView.top - topMargin - headerView.height).toFloat()
+                            .coerceAtMost(y)
                     }
                 }
                 return y
@@ -430,11 +468,17 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
                     x += (width - headerView.width).toFloat()
                 }
                 if (nextHeaderView != null) {
-                    val leftMargin = (nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams)?.leftMargin ?: 0
-                    val rightMargin = (nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams)?.rightMargin ?: 0
+                    val leftMargin =
+                        (nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams)?.leftMargin
+                            ?: 0
+                    val rightMargin =
+                        (nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams)?.rightMargin
+                            ?: 0
                     x = when {
-                        reverseLayout -> (nextHeaderView.right + rightMargin).toFloat().coerceAtLeast(x)
-                        else -> (nextHeaderView.left - leftMargin - headerView.width).toFloat().coerceAtMost(x)
+                        reverseLayout -> (nextHeaderView.right + rightMargin).toFloat()
+                            .coerceAtLeast(x)
+                        else -> (nextHeaderView.left - leftMargin - headerView.width).toFloat()
+                            .coerceAtMost(x)
                     }
                 }
                 return x
@@ -470,7 +514,8 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
             val middle = (low + high) / 2
             when {
                 headerPositions[middle] > position -> high = middle - 1
-                middle < headerPositions.size - 1 && headerPositions[middle + 1] <= position -> low = middle + 1
+                middle < headerPositions.size - 1 && headerPositions[middle + 1] <= position ->
+                    low = middle + 1
                 else -> return middle
             }
         }
