@@ -484,52 +484,24 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
      * Finds the header index of `position` in `headerPositions`.
      */
     private fun findHeaderIndex(position: Int): Int {
-        var low = 0
-        var high = headerPositions.size - 1
-        while (low <= high) {
-            val middle = (low + high) / 2
-            when {
-                headerPositions[middle] > position -> high = middle - 1
-                headerPositions[middle] < position -> low = middle + 1
-                else -> return middle
-            }
-        }
-        return -1
+        val index = headerPositions.binarySearch(position, 0, headerPositions.size)
+        return if (index >= 0) index else -1
     }
 
     /**
      * Finds the header index of `position` or the one before it in `headerPositions`.
      */
     private fun findHeaderIndexOrBefore(position: Int): Int {
-        var low = 0
-        var high = headerPositions.size - 1
-        while (low <= high) {
-            val middle = (low + high) / 2
-            when {
-                headerPositions[middle] > position -> high = middle - 1
-                middle < headerPositions.size - 1 && headerPositions[middle + 1] <= position ->
-                    low = middle + 1
-                else -> return middle
-            }
-        }
-        return -1
+        val index = headerPositions.binarySearch(position, 0, headerPositions.size)
+        return if (index >= 0) index else index.inv() - 1
     }
 
     /**
      * Finds the header index of `position` or the one next to it in `headerPositions`.
      */
     private fun findHeaderIndexOrNext(position: Int): Int {
-        var low = 0
-        var high = headerPositions.size - 1
-        while (low <= high) {
-            val middle = (low + high) / 2
-            when {
-                middle > 0 && headerPositions[middle - 1] >= position -> high = middle - 1
-                headerPositions[middle] < position -> low = middle + 1
-                else -> return middle
-            }
-        }
-        return -1
+        val index = headerPositions.binarySearch(position, 0, headerPositions.size)
+        return if (index >= 0) index else index.inv()
     }
 
     private fun setScrollState(position: Int, offset: Int) {
