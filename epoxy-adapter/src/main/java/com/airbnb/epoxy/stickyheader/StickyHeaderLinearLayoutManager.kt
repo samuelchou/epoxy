@@ -302,7 +302,7 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
      * Creates [RecyclerView.ViewHolder] for [position], including measure / layout, and assigns it to
      * [stickyHeader].
      */
-    private fun createStickyHeader(recycler: RecyclerView.Recycler, position: Int) {
+    private fun createStickyHeader(recycler: RecyclerView.Recycler, position: Int): View {
         val stickyHeader = recycler.getViewForPosition(position)
 
         // Setup sticky header if the adapter requires it.
@@ -318,6 +318,8 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
 
         this.stickyHeader = stickyHeader
         this.stickyHeaderPosition = position
+
+        return stickyHeader
     }
 
     /**
