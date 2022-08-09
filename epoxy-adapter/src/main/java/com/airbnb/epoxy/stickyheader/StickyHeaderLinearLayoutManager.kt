@@ -548,7 +548,7 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
             val headerCount = headerPositions.size
             if (headerCount > 0) {
                 var i = findHeaderIndexOrNext(positionStart)
-                while (i != -1 && i < headerCount) {
+                while (i in 0 until headerCount) {
                     headerPositions[i] = headerPositions[i] + itemCount
                     i++
                 }
@@ -587,7 +587,7 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
 
                 // Shift headers below up.
                 var i = findHeaderIndexOrNext(positionStart + itemCount)
-                while (i != -1 && i < headerCount) {
+                while (i in 0 until headerCount) {
                     headerPositions[i] = headerPositions[i] - itemCount
                     i++
                 }
@@ -601,7 +601,7 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
             if (headerCount > 0) {
                 if (fromPosition < toPosition) {
                     var i = findHeaderIndexOrNext(fromPosition)
-                    while (i != -1 && i < headerCount) {
+                    while (i in 0 until headerCount) {
                         val headerPos = headerPositions[i]
                         if (headerPos >= fromPosition && headerPos < fromPosition + itemCount) {
                             headerPositions[i] = headerPos - (toPosition - fromPosition)
@@ -616,7 +616,7 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
                     }
                 } else {
                     var i = findHeaderIndexOrNext(toPosition)
-                    loop@ while (i != -1 && i < headerCount) {
+                    loop@ while (i in 0 until headerCount) {
                         val headerPos = headerPositions[i]
                         when {
                             headerPos >= fromPosition && headerPos < fromPosition + itemCount -> {
