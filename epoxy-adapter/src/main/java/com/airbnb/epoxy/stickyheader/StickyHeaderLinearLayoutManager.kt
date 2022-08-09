@@ -263,9 +263,8 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
                     nextHeaderPos != headerPos + 1
                 ) {
                     // 1. Ensure existing sticky header, if any, is of correct type.
-                    if (stickyHeader != null && getItemViewType(stickyHeader!!) != adapter?.getItemViewType(
-                            headerPos
-                        )
+                    if (stickyHeader != null &&
+                        getItemViewType(stickyHeader!!) != adapter?.getItemViewType(headerPos)
                     ) {
                         // A sticky header was shown before but is not of the correct type. Scrap it.
                         scrapStickyHeader(recycler)
@@ -437,18 +436,15 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
                     y += (height - headerView.height).toFloat()
                 }
                 if (nextHeaderView != null) {
-                    val bottomMargin =
-                        (nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams)?.bottomMargin
-                            ?: 0
-                    val topMargin =
-                        (nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams)?.topMargin
-                            ?: 0
-                    y = when {
-                        reverseLayout -> (nextHeaderView.bottom + bottomMargin).toFloat()
-                            .coerceAtLeast(y)
-                        else -> (nextHeaderView.top - topMargin - headerView.height).toFloat()
-                            .coerceAtMost(y)
-                    }
+                    val params = nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams
+                    val bottomMargin = params?.bottomMargin ?: 0
+                    val topMargin = params?.topMargin ?: 0
+
+                    val comparePos: Int =
+                        if (reverseLayout) (nextHeaderView.bottom + bottomMargin)
+                        else (nextHeaderView.top - topMargin - headerView.height)
+
+                    y = comparePos.toFloat().coerceAtLeast(y)
                 }
                 return y
             }
@@ -468,18 +464,15 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
                     x += (width - headerView.width).toFloat()
                 }
                 if (nextHeaderView != null) {
-                    val leftMargin =
-                        (nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams)?.leftMargin
-                            ?: 0
-                    val rightMargin =
-                        (nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams)?.rightMargin
-                            ?: 0
-                    x = when {
-                        reverseLayout -> (nextHeaderView.right + rightMargin).toFloat()
-                            .coerceAtLeast(x)
-                        else -> (nextHeaderView.left - leftMargin - headerView.width).toFloat()
-                            .coerceAtMost(x)
-                    }
+                    val params = nextHeaderView.layoutParams as? ViewGroup.MarginLayoutParams
+                    val leftMargin = params?.leftMargin ?: 0
+                    val rightMargin = params?.rightMargin ?: 0
+
+                    val comparePos =
+                        if (reverseLayout) (nextHeaderView.right + rightMargin)
+                        else (nextHeaderView.left - leftMargin - headerView.width)
+
+                    x = comparePos.toFloat().coerceAtLeast(x)
                 }
                 return x
             }
