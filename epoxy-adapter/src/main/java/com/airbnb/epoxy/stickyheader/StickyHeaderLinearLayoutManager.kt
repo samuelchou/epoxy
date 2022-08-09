@@ -50,6 +50,7 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
     private var scrollPosition = RecyclerView.NO_POSITION
     private var scrollOffset = 0
 
+    // region Init Setting
     override fun onAttachedToWindow(recyclerView: RecyclerView) {
         super.onAttachedToWindow(recyclerView)
         setAdapter(recyclerView.adapter)
@@ -161,8 +162,9 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
         setScrollState(position, offset)
         super.scrollToPositionWithOffset(position, offset)
     }
+    // endregion Scroll Setting
 
-    //region Computation
+    // region Computation
     // Mainly [RecyclerView] functionality by removing sticky header from calculations
 
     override fun computeVerticalScrollExtent(state: RecyclerView.State): Int =
@@ -195,9 +197,9 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
 
     /**
      * Perform the [operation] without the sticky header view by
-     * detaching the view -> performing operation -> detaching the view.
+     * detaching the view -> performing operation -> attaching the view.
      */
-    private fun <T> restoreView(operation: () -> T): T {
+    private inline fun <T> restoreView(operation: () -> T): T {
         stickyHeader?.let(this::detachView)
         val result = operation()
         stickyHeader?.let(this::attachView)
@@ -206,6 +208,7 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
 
     //endregion
 
+    // region Public Call
     /**
      * Offsets the vertical location of the sticky header relative to the its default position.
      */
@@ -226,7 +229,9 @@ class StickyHeaderLinearLayoutManager @JvmOverloads constructor(
      * Returns true if `view` is the current sticky header.
      */
     fun isStickyHeader(view: View): Boolean = view === stickyHeader
+    // endregion Public Call
 
+    // region Sticky Header Generation
     /**
      * Updates the sticky header state (creation, binding, display), to be called whenever there's a layout or scroll
      */
